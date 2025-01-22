@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { LuSearch } from "react-icons/lu";
-import { IoCart } from "react-icons/io5";
+import { RiShoppingCart2Line } from "react-icons/ri";
 import { LuHeart } from "react-icons/lu";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
@@ -38,7 +38,7 @@ const Navbar = () => {
         </div>
 
         {/* Links Section */}
-        <ul className="flex items-center justify-center space-x-4 md:text-[11px]  text-[14px] mt-2 md:mt-0">
+        <ul className="flex items-center justify-center space-x-4 md:text-[11px] text-[14px] mt-2 md:mt-0">
           <li>Find a Store</li>
           <div className="w-[2px] h-[14px] bg-black"></div>
           <Link href="/Contact">
@@ -46,18 +46,17 @@ const Navbar = () => {
           </Link>
           <div className="w-[2px] h-[14px] bg-black"></div>
           <Link href="/Joinus">
-            <li>Join Us</li>{" "}
+            <li>Join Us</li>
           </Link>
           <div className="w-[2px] h-[14px] bg-black"></div>
           <Link href="/Login">
-            {" "}
-            <li>LogIn</li>{" "}
+            <li>LogIn</li>
           </Link>
         </ul>
       </div>
 
       {/* Main Navbar */}
-      <div className="w-full h-[60px] flex items-center  sm:px-12">
+      <div className="w-full h-[60px] flex items-center sm:px-12">
         {/* Logo */}
         <Image
           src="/Images/NavbarImg/logo.svg"
@@ -69,13 +68,13 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <ul className="hidden sm:flex flex-1 justify-center items-center space-x-6 text-[15px] font-medium">
           <Link href="#">
-            <li>New & Featured</li>{" "}
+            <li>New & Featured</li>
           </Link>
           <li>
             <Link href="/Cart">Men</Link>
           </li>
           <Link href="/ProductDetail">
-            <li>Women</li>{" "}
+            <li>Women</li>
           </Link>
           <Link href="#">
             <li>Kids</li>
@@ -89,7 +88,7 @@ const Navbar = () => {
         </ul>
 
         {/* Icons */}
-        <div className=" max-md:hidden  flex items-center space-x-4 ml-auto">
+        <div className="max-md:hidden flex items-center space-x-4 ml-auto">
           <div className="hidden sm:flex items-center bg-[#F5F5F5] rounded-full px-4 py-2">
             <LuSearch className="text-[20px]" />
             <input
@@ -98,13 +97,16 @@ const Navbar = () => {
               className="ml-2 text-[15px] bg-transparent placeholder-[#CCCCCC] outline-none"
             />
           </div>
-          
-        <LuHeart className="text-[30px]" />
-         <Link href="/Cart"> <IoCart className="text-[30px]" /></Link>
+          <LuHeart className="text-[30px]" />
+          {/* Cart Icon with hover effect */}
+         
         </div>
 
-        {/* Hamburger Menu */}
-        <div className="ml-auto items-center mt-2 justify-end">
+        {/* Hamburger Menu (visible on all screen sizes) */}
+        <div className="flex items-center space-x-4 ml-auto">
+          <Link href="/Cart">
+          <RiShoppingCart2Line className="text-[30px] sm:m-0  md:m-4 bg-white cursor-pointer hover:text-black transition-all duration-200" />
+          </Link>
           <button
             onClick={toggleMenu}
             className="text-black focus:outline-none ml-4"
