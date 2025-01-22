@@ -38,7 +38,7 @@ const Navbar = () => {
         </div>
 
         {/* Links Section */}
-        <ul className="flex items-center justify-center space-x-4 md:text-[11px] font-bold text-[14px] mt-2 md:mt-0">
+        <ul className="flex items-center justify-center space-x-4 md:text-[11px]  text-[14px] mt-2 md:mt-0">
           <li>Find a Store</li>
           <div className="w-[2px] h-[14px] bg-black"></div>
           <Link href="/Contact">
