@@ -1,227 +1,101 @@
-"use client"
+"use client";
 import Image from "next/image";
-import React from "react";
+import { useCart } from "../context/CartContext"; // Importing useCart to access cart items
 import { Poppins } from "next/font/google";
-
 const poppins = Poppins({
   weight: ["400", "700"],
   subsets: ["latin"],
 });
 const Checkout = () => {
+  const { cartItems } = useCart(); // Using the useCart hook to access cart items
+
   return (
-    <div className={`${poppins.className} min-h-screen bg-gray-50 flex flex-col md:flex-row justify-between`}>
-      {/* Left Section */}
+    <div className={ `${poppins.className} mt-[100px] min-h-screen bg-gray-50 flex items-center justify-center`}> {/* Centering the entire content */}
       <div className="w-full md:w-2/3 bg-white p-6 md:p-12 shadow-lg">
-        <h1 className="text-xl md:text-2xl font-bold mb-6">
-          How would you like to get your order?
-        </h1>
-        <p className="text-sm text-gray-600 mb-4">
-          Customs regulation for Pakistan requires a copy of the recipients KYC.
-          The address on this KYC needs to match the shipping address. Our
-          courier will contact you via SMS/email to obtain a copy of your KYC.
-          The KYC will be stored securely and used solely for the purpose of
-          clearing customs (including sharing it with customs officials) for all
-          orders and returns.
-          <a href="#" className="text-blue-500 underline ml-1">
-            Learn More
-          </a>
-        </p>
-        <button className="border border-gray-300 rounded-md py-2 px-4 mb-8 hover:bg-gray-100">
-          Deliver it
-        </button>
+        <h1 className="text-xl md:text-2xl font-bold mb-6">Order Summary</h1>
 
-        <h2 className="text-lg font-semibold mb-4">
-          Enter your name and address:
-        </h2>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <input
-            type="text"
-            placeholder="First Name"
-            className="border border-gray-300 rounded-md py-2 px-4"
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            className="border border-gray-300 rounded-md py-2 px-4"
-          />
-          <input
-            type="text"
-            placeholder="Address Line 1"
-            className="border border-gray-300 rounded-md py-2 px-4 md:col-span-2"
-          />
-          <input
-            type="text"
-            placeholder="Address Line 2"
-            className="border border-gray-300 rounded-md py-2 px-4"
-          />
-          <input
-            type="text"
-            placeholder="Address Line 3"
-            className="border border-gray-300 rounded-md py-2 px-4"
-          />
-          <input
-            type="text"
-            placeholder="Postal Code"
-            className="border border-gray-300 rounded-md py-2 px-4"
-          />
-          <input
-            type="text"
-            placeholder="Locality"
-            className="border border-gray-300 rounded-md py-2 px-4"
-          />
-          <select className="border border-gray-300 rounded-md py-2 px-4">
-            <option>State/Territory</option>
-          </select>
-          <input
-            type="text"
-            placeholder="India"
-            className="border border-gray-300 rounded-md py-2 px-4"
-          />
+        {/* Display Cart Items */}
+        <div className="space-y-4 mb-6">
+          {cartItems.map((item) => (
+            <div key={item._id} className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative w-20 h-20">
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.productName}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold">{item.productName}</p>
+                  <p className="text-sm text-gray-600">Price: ${item.price}</p>
+                  <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                </div>
+              </div>
+              <div className="text-xl font-bold text-gray-800">
+                ${(item.price * item.quantity).toFixed(2)}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-between border-t pt-4">
+          <span className="text-lg font-semibold">Total</span>
+          <span className="text-lg font-semibold text-blue-600">
+            ${cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}
+          </span>
+        </div>
+
+        {/* Shipping & Contact Form */}
+        <form className="mt-8">
+          <h2 className="text-lg font-semibold mb-4">Enter Your Shipping Information</h2>
+
+          {/* Full Name */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-600 mb-2">Full Name</label>
+            <input
+              type="text"
+              placeholder="Enter your full name"
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Email Address */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-600 mb-2">Email Address</label>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Shipping Address */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-600 mb-2">Shipping Address</label>
+            <textarea
+              placeholder="Enter your shipping address"
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={4}
+            ></textarea>
+          </div>
+
+          {/* Contact Number */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-600 mb-2">Contact Number</label>
+            <input
+              type="text"
+              placeholder="Enter your contact number"
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button className="bg-gradient-to-r from-black to-purple-600 text-white py-3 px-6 rounded-md w-full mb-8 transition-all ease-in-out transform hover:scale-105 hover:from-purple-600 hover:to-black">
+  Submit Shipping Information
+</button>
         </form>
-        <div className="flex items-center space-x-2 mb-4">
-          <input type="checkbox" id="save-address" className="h-4 w-4" />
-          <label htmlFor="save-address" className="text-sm text-gray-600">
-            Save this address to my profile
-          </label>
-        </div>
-        <div className="flex items-center space-x-2 mb-4">
-          <input type="checkbox" id="preferred-address" className="h-4 w-4" />
-          <label htmlFor="preferred-address" className="text-sm text-gray-600">
-            Make this my preferred address
-          </label>
-        </div>
-
-        <h2 className="text-lg font-semibold mb-4">
-          Whats your contact information?
-        </h2>
-        <input
-          type="email"
-          placeholder="Email"
-          className="border border-gray-300 rounded-md py-2 px-4 w-full mb-4"
-        />
-        <p className="text-sm text-gray-500 mb-4">
-          A confirmation email will be sent after checkout.
-        </p>
-        <input
-          type="text"
-          placeholder="Phone Number"
-          className="border border-gray-300 rounded-md py-2 px-4 w-full mb-6"
-        />
-        <p className="text-sm text-gray-500 mb-6">
-          A carrier might contact you to confirm delivery.
-        </p>
-
-        <h2 className="text-lg font-semibold mb-4">Whats your PAN?</h2>
-        <input
-          type="text"
-          placeholder="PAN"
-          className="border border-gray-300 rounded-md py-2 px-4 w-full mb-4"
-        />
-        <p className="text-sm text-gray-500 mb-4">
-          Enter your PAN to enable payment with UPI, Net Banking or local card
-          methods.
-        </p>
-        <div className="flex items-center space-x-2 mb-4">
-          <input type="checkbox" id="save-pan" className="h-4 w-4" />
-          <label htmlFor="save-pan" className="text-sm text-gray-600">
-            Save PAN details to Nike Profile
-          </label>
-        </div>
-        <div className="flex items-center space-x-2 mb-4">
-          <input type="checkbox" id="consent" className="h-4 w-4" />
-          <label htmlFor="consent" className="text-sm text-gray-600">
-            I have read and consent to the processing of my information in
-            accordance with the
-            <a href="#" className="text-blue-500 underline">
-              {" "}
-              Privacy Statement
-            </a>{" "}
-            and
-            <a href="#" className="text-blue-500 underline">
-              {" "}
-              Cookies Policy
-            </a>
-            .
-          </label>
-        </div>
-        <button className="bg-yellow-400 hover:bg-yellow-600 text-gray-600 py-3 px-6 rounded-md w-full mb-8">
-          Submit Shipping Information
-         </button>
-
-        <h2 className="text-lg font-semibold mb-4">Delivery</h2>
-        <div className="border-b border-gray-300 mb-4"></div>
-        <h2 className="text-lg font-semibold mb-4">Shipping</h2>
-        <div className="border-b border-gray-300 mb-4"></div>
-        <h2 className="text-lg font-semibold mb-4">Billing</h2>
-        <div className="border-b border-gray-300 mb-4"></div>
-        <h2 className="text-lg font-semibold mb-4">Payment</h2>
-        <div className="border-b border-gray-300 mb-4"></div>
-      </div>
-      {/* Right Section */}
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-1/3 mt-6 md:mt-0">
-        <h2 className="text-lg font-bold">Order Summary</h2>
-        <div className="flex justify-between items-center mt-4">
-          <p className="text-gray-600">Subtotal</p>
-          <p className="font-semibold">₹ 20890</p>
-        </div>
-        <div className="flex justify-between items-center mt-2">
-          <p className="text-gray-600">Delivery/Shipping</p>
-          <p className="font-semibold">Free</p>
-        </div>
-        <div className="flex justify-between items-center mt-2">
-          <p className="text-lg font-semibold">Total</p>
-          <p className="text-lg font-semibold">₹ 20890</p>
-        </div>
-        <p className="text-gray-500 text-sm mt-2">
-          (The total reflects the price of your order including all duties and
-          taxes)
-        </p>
-        <div className="border-t mt-4 pt-4">
-          <h3 className="text-md font-semibold mb-2">
-            Arrives Mon 27 Mar - Wed 12 Apr
-          </h3>
-          <div className="flex items-center space-x-4">
-            <Image
-              width={100}
-              height={100}
-              src="/Product/Rectangle (10).svg"
-              alt="Product"
-              className="h-20 w-20 object-cover rounded-lg"
-            />
-            <div>
-              <p className="text-gray-700 font-semibold">
-                Nike DriFIT ADV TechKnit
-              </p>
-              <p className="text-sm text-gray-500">
-                Ultra Mens Short-Sleeve Running Top
-              </p>
-              <p className="text-sm font-bold">₹ 3895.00</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4 mt-4">
-            <Image
-              width={100}
-              height={100}
-              src="/Product/Rectangle (7).svg"
-              alt="Product"
-              className="h-20 w-20 object-cover rounded-lg"
-            />
-            <div>
-              <p className="text-gray-700 font-semibold">
-                Nike Air Max 97 SE Mens Shoes
-              </p>
-              <p className="text-sm text-gray-500">Size UK 8</p>
-              <p className="text-sm font-bold">₹ 16995</p>
-            </div>
-          </div>
-          {/* Added Button */}
-          <button
-            className="bg-blue-500 text-white py-3 px-6 rounded-md w-full mt-6 hover:bg-blue-600"
-            onClick={() => alert("Proceeding to payment")}
-          >
-            Proceed to Payment
-          </button>
-        </div>
       </div>
     </div>
   );

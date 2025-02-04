@@ -10,7 +10,7 @@ const poppins = Poppins({
 
 const Hero = () => {
   return (
-    <div className={`${poppins.className} w-full overflow-x-hidden`}>
+    <div className={`${poppins.className} mt-28 w-full overflow-x-hidden`}>
       <div className="w-full h-[58px] bg-[#F5F5F5] flex flex-col justify-center  items-center px-4 sm:px-12">
         <h2 className="text-[11px]">Hello Nike App</h2>
         <div className="w-auto">

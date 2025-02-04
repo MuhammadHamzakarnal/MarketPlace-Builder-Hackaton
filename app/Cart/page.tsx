@@ -1,187 +1,176 @@
 "use client";
-import React, { useState } from "react";
-import { Poppins } from "next/font/google";
+import { useCart } from "../context/CartContext";
 import Image from "next/image";
-import { CiHeart } from "react-icons/ci";
-import { RiDeleteBin5Line } from "react-icons/ri";
+import { FiPlus, FiMinus, FiTrash2, FiShoppingBag } from "react-icons/fi";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-
+import { Poppins } from "next/font/google";
 const poppins = Poppins({
   weight: ["400", "700"],
   subsets: ["latin"],
 });
+const CartPage = () => {
+  const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: string;
+  } | null>(null);
+  const totalAmount = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
-const Page = () => {
-  const [cart, setCart] = useState<{
-    id: number;
-    name: string;
-    description: string;
-    color: string;
-    size: string;
-    quantity: number;
-    price: number;
-    image: string;
-  }[]>([
-    {
-      id: 1,
-      name: "Nike Dri FIT ADV TechKnit Ultra",
-      description: "Mens Short-Sleeve Running Top",
-      color: "Ashen Slate/Cobalt Bliss",
-      size: "L",
-      quantity: 1,
-      price: 3895,
-      image: "/Featured/Image (5).svg",
-    },
-    {
-      id: 2,
-      name: "Nike Air Max 97 SE",
-      description: "Mens Shoes",
-      color: "Flat Pewter/Light Bone/Black/White",
-      size: "8",
-      quantity: 1,
-      price: 16995,
-      image: "/Featured/Image (7).svg",
-    },
-  ]);
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => setNotification(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
-  const [favorites, setFavorites] = useState<number[]>([]);
-
-  const handleQuantityChange = (id: number, delta: number) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
+  const handleQuantityChange = (
+    itemId: string | number,
+    newQuantity: number
+  ) => {
+    if (newQuantity < 1) return;
+    updateQuantity(String(itemId), newQuantity);
+    setNotification({ message: "Quantity updated", type: "info" });
   };
 
-  const handleDelete = (id: number) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+  const handleRemoveItem = (itemId: string | number) => {
+    removeFromCart(String(itemId));
+    setNotification({ message: "Item removed", type: "error" });
   };
-
-  const toggleFavorite = (id: number) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(id)
-        ? prevFavorites.filter((favId) => favId !== id)
-        : [...prevFavorites, id]
-    );
-  };
-
-  const calculateSubtotal = () =>
-    cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
-    <div className={`${poppins.className} px-4 md:px-8 lg:px-16`}>
-      <div className="max-w-[1100px] mx-auto mt-[40px] flex flex-col gap-8">
-        {/* Bag and Summary Wrapper */}
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Bag Section */}
-          <div className="w-full md:w-2/3">
-            <div className="w-full bg-[#F7F7F7] p-4 gap-2">
-              <h5 className="font-medium text-[13px]">Free Delivery</h5>
-              <p className="text-[11px] font-normal text-[#111111]">
-                Applies to orders of ₹ 14 000.00 or more.{" "}
-                <span className="font-medium text-[11px] underline ml-3">
-                  View details
-                </span>
-              </p>
-            </div>
-            <h1 className="text-[22px] font-medium mt-4">Bag</h1>
-            <div className="w-full mt-4 space-y-6">
-              {cart.map((item) => (
+    <div className={`${poppins.className} mt-28 min-h-screen bg-gradient-to-b from-gray-50 to-white py-8}`}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {notification && (
+          <div
+            className={`fixed top-4 right-4 p-4 rounded-lg shadow-xl text-white animate-slide-in ${
+              notification.type === "error" ? "bg-red-500" : "bg-blue-500"
+            }`}
+          >
+            {notification.message}
+          </div>
+        )}
+
+        <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-black to-purple-600 bg-clip-text text-transparent">
+          Shopping Cart
+        </h1>
+
+        {cartItems.length === 0 ? (
+          <div className="text-center py-20 space-y-6">
+            <FiShoppingBag className="mx-auto text-gray-300 h-24 w-24" />
+            <p className="text-2xl text-gray-500 font-medium">
+              Your cart feels lonely...
+            </p>
+            <Link href="Product">
+            <button
+              className="bg-gradient-to-r from-black to-purple-600  text-white px-8 py-3 rounded-full hover:bg-purple-700 transition-transform hover:scale-105"
+              
+            >
+              Continue Shopping
+            </button>
+            </Link>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="md:col-span-2 space-y-6">
+              {cartItems.map((item) => (
                 <div
-                  key={item.id}
-                  className="flex flex-col sm:flex-row items-start gap-6"
+                  key={item._id}
+                  className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 group"
                 >
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    width={150}
-                    height={150}
-                    className="flex-shrink-0"
-                  />
-                  <div className="flex-1 border-b border-[#E5E5E5] pb-5">
-                    <h5 className="font-medium text-[15px] text-[#111111]">
-                      {item.name}
-                    </h5>
-                    <p className="text-[15px] font-normal text-[#757575]">
-                      {item.description}
-                    </p>
-                    <p className="text-[15px] font-normal text-[#757575]">
-                      {item.color}
-                    </p>
-                    <p className="text-[15px] font-normal text-[#757575]">
-                      Size {item.size}{" "}
-                      <span className="ml-10 text-[15px] font-normal text-[#757575]">
-                        Quantity:{" "}
-                        <button
-                          onClick={() => handleQuantityChange(item.id, -1)}
-                          className="px-2"
-                        >
-                          -
-                        </button>
-                        {item.quantity}
-                        <button
-                          onClick={() => handleQuantityChange(item.id, 1)}
-                          className="px-2"
-                        >
-                          +
-                        </button>
-                      </span>
-                    </p>
-                    <div className="flex gap-3 mt-6">
-                      <CiHeart
-                        className={`w-6 h-6 cursor-pointer ${
-                          favorites.includes(item.id) ? "text-red-500" : ""
-                        }`}
-                        onClick={() => toggleFavorite(item.id)}
-                      />
-                      <RiDeleteBin5Line 
-                        className="w-6 h-6 cursor-pointer"
-                        onClick={() => handleDelete(item.id)}
+                  <div className="flex items-start gap-6">
+                    <div className="relative w-32 h-32 overflow-hidden rounded-lg">
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.productName}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
+
+                    <div className="flex-1">
+                      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                        {item.productName}
+                      </h2>
+                      <p className="text-lg font-bold text-blue-600 mb-4">
+                        ${item.price.toFixed(2)}
+                      </p>
+
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(item._id, item.quantity - 1)
+                            }
+                            className="p-1 hover:bg-gray-200 rounded-full transition-colors"
+                          >
+                            <FiMinus className="w-5 h-5 text-gray-600" />
+                          </button>
+                          <span className="text-lg font-medium w-8 text-center">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(item._id, item.quantity + 1)
+                            }
+                            className="p-1 hover:bg-gray-200 rounded-full transition-colors"
+                          >
+                            <FiPlus className="w-5 h-5 text-gray-600" />
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={() => handleRemoveItem(item._id)}
+                          className="text-red-500 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition-colors"
+                        >
+                          <FiTrash2 className="w-6 h-6" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <p className="font-normal text-[15px]">
-                    MRP: ₹ {item.price * item.quantity}
-                  </p>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Summary Section */}
-          <div className="w-full md:w-1/3">
-            <div className="bg-white p-6 border border-[#E5E5E5] rounded-lg">
-              <h1 className="text-[21px] font-medium">Summary</h1>
-              <div className="flex justify-between mt-4">
-                <p className="text-[15px] font-normal">Subtotal</p>
-                <p className="text-[15px] font-normal">
-                  ₹ {calculateSubtotal()}
-                </p>
+            <div className="bg-white rounded-xl p-6 h-fit shadow-md sticky top-8">
+              <h2 className="text-2xl font-bold mb-6 text-gray-800">
+                Order Summary
+              </h2>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">
+                    Subtotal (
+                    {cartItems.reduce((sum, item) => sum + item.quantity, 0)}{" "}
+                    items)
+                  </span>
+                  <span className="font-medium">${totalAmount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Shipping</span>
+                  <span className="font-medium text-green-600">Free</span>
+                </div>
+                <div className="flex justify-between border-t pt-4">
+                  <span className="text-lg font-bold text-gray-800">Total</span>
+                  <span className="text-lg font-bold text-blue-600">
+                    ${totalAmount.toFixed(2)}
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <p className="text-[15px] font-normal">
-                  Estimated Delivery & Handling
-                </p>
-                <p className="text-[15px] font-normal">Free</p>
-              </div>
-              <div className="flex justify-between border-y border-[#E5E5E5] py-4">
-                <p className="text-[15px] font-normal">Total</p>
-                <p className="text-[15px] font-normal">
-                  ₹ {calculateSubtotal()}
-                </p>
-              </div>
-              <Link href="/Cheakout"> <button className="w-full h-[60px] rounded-[30px] bg-black text-white text-[15px] font-medium mt-4">
-                Member Checkout
-              </button> </Link>
+              <Link href="Cheakout">
+                <button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-bold hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95">
+                  Checkout Now
+                </button>
+              </Link>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Page;
+export default CartPage;
