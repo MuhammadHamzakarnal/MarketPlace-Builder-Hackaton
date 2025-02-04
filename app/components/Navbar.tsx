@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top Navbar */}
-      <div className="fixed top-0 left-0 w-full z-50 bg-[#F5F5F5] h-[36px] flex items-center justify-between px-4 sm:px-12">
+      <div className={`${poppins.className}fixed top-0 left-0 w-full z-50 bg-[#F5F5F5] h-[36px] flex items-center justify-between px-4 sm:px-12`}>
         <div className="flex-shrink-0">
           <Image src="/Images/NavbarImg/Frame.svg" alt="menu logo" width={24} height={24} />
         </div>

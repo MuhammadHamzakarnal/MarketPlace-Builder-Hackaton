@@ -10,7 +10,7 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 const CartPage = () => {
-  const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
+  const { cartItems,  removeFromCart, updateQuantity } = useCart();
   const [notification, setNotification] = useState<{
     message: string;
     type: string;
