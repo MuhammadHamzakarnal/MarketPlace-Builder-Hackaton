@@ -64,36 +64,49 @@ const Navbar = () => {
           <LuHeart className="text-[30px]" />
 
           {/* Cart Icon */}
-          <Link href="/Cart" className="relative">
+          {/* <Link href="/Cart" className="relative">
             <RiShoppingCart2Line className="text-[30px] sm:m-0 md:m-4 bg-white cursor-pointer hover:text-black transition-all duration-200" />
             {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                 {totalItems}
               </span>
             )}
-          </Link>
+          </Link> */}
         </div>
 
         {/* Hamburger Menu */}
-        <div className="flex items-center space-x-4 ml-auto relative">
-          <button onClick={toggleMenu} className="text-black focus:outline-none ml-4">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-            </svg>
-          </button>
+       {/* Hamburger Menu + Cart Icon */}
+<div className="flex items-center space-x-4 ml-auto relative">
+  {/* Cart Icon */}
+  <Link href="/Cart" className="relative">
+    <RiShoppingCart2Line className="md:ml-2 text-[30px] cursor-pointer hover:text-black transition-all duration-200" />
+    {totalItems > 0 && (
+      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+        {totalItems}
+      </span>
+    )}
+  </Link>
 
-          {/* Dropdown Menu */}
-          {isOpen && (
-            <div className="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-lg w-48 p-4">
-              <ul className="flex flex-col space-y-2">
-                <li><Link href="/" onClick={closeMenu} className="text-gray-700 hover:text-black">Home</Link></li>
-                <li><Link href="/About" onClick={closeMenu} className="text-gray-700 hover:text-black">About</Link></li>
-                <li><Link href="/Product" onClick={closeMenu} className="text-gray-700 hover:text-black">Products</Link></li>
-                <li><Link href="/Contact" onClick={closeMenu} className="text-gray-700 hover:text-black">Contact</Link></li>
-              </ul>
-            </div>
-          )}
-        </div>
+  {/* Hamburger Button */}
+  <button onClick={toggleMenu} className="text-black focus:outline-none">
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+    </svg>
+  </button>
+
+  {/* Dropdown Menu */}
+  {isOpen && (
+    <div className="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-lg w-48 p-4">
+      <ul className="flex flex-col space-y-2">
+        <li><Link href="/" onClick={closeMenu} className="text-gray-700 hover:text-black">Home</Link></li>
+        <li><Link href="/About" onClick={closeMenu} className="text-gray-700 hover:text-black">About</Link></li>
+        <li><Link href="/Product" onClick={closeMenu} className="text-gray-700 hover:text-black">Products</Link></li>
+        <li><Link href="/Contact" onClick={closeMenu} className="text-gray-700 hover:text-black">Contact</Link></li>
+      </ul>
+    </div>
+  )}
+</div>
+
       </div>
     </>
   );

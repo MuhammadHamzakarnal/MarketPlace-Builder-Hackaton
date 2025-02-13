@@ -59,7 +59,7 @@ const ProductPage = () => {
       <div className="w-full mt-4 flex items-center justify-between px-4 border-b border-gray-200 pb-4">
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="md:hidden bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors"
+          className="md:hidden bg-blue-100 text-blue-600  py-2 rounded-lg hover:bg-blue-200 transition-colors"
         >
           {isSidebarOpen ? 'Close Filters' : 'Open Filters'}
         </button>
